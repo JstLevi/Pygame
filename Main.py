@@ -31,7 +31,7 @@ bg_phase5 = pygame.image.load('Background/phase5.jpg')
 bg_phase6 = pygame.image.load('background/phase6.png')
 bg_phase7 = pygame.image.load('background/phase7.jpg')
 bg_phase8 = pygame.image.load('background/phase8.jpg')
-bg_phase9 = pygame.image.load('background/phase9.jpg')
+#bg_phase9 = pygame.image.load('background/phase9.png')
 bg_phase10 = pygame.image.load('background/phase10.jpg')
 bg_phase11 = pygame.image.load('background/phase11.jpg')
 
@@ -43,9 +43,9 @@ initial_positions = {
     3: (0, 360),
     4: (0, 430), 
     5: (0, 340),
-    6: (460, 280),
-    7: (0, 430),
-    8: (50, 430),
+    6: (460, 265),
+    7: (0, 300),
+    8: (130, 358),
     9: (50, 430),
     10: (50, 430),
     11: (50, 430)
@@ -67,11 +67,11 @@ restricted_areas = [
 ]
 
 # Start at the spawning area
-current_phase = 'spawning'
-#current_phase = 5
+#current_phase = 'spawning'
+current_phase = 9
 
 # Game character initial position and movement variables
-x, y = initial_positions['spawning']
+x, y = initial_positions[9]
 vel = 8
 left = False
 right = False
@@ -356,8 +356,8 @@ def perform_phase5_task():
 # PHASE6 OBJECTIVE AND TASK
 
 traffic_light_color = "red"  # Initial color of the traffic light
-traffic_light_rect_red = pygame.Rect(709, 110, 50, 50)  # Traffic light rectangle
-traffic_light_rect_green = pygame.Rect(709, 165, 50, 50)  # Traffic light rectangle for green light
+traffic_light_rect_red = pygame.Rect(708, 174, 35, 35)  # Traffic light rectangle
+traffic_light_rect_green = pygame.Rect(708, 119, 35, 35)  # Traffic light rectangle for green light
 traffic_light_center = traffic_light_rect_red.center
 traffic_light_radius = traffic_light_rect_red.width // 2
 traffic_light_center1 = traffic_light_rect_green.center
@@ -372,7 +372,7 @@ phase6_car_image = pygame.image.load('images/phase6_car.png')
 
 car_rect2 = pygame.Rect(-1200, 450, car_width, car_height)  # Initial car position
 phase6_car_image2 = pygame.image.load('images/phase6_car2.png')
-car_vel = 5
+car_vel = 20
 walk_vel = 4
 phase6_task_completed = False
 phase6_upper_boundary = 260
@@ -405,7 +405,7 @@ def phase6_moving_car():
 
 # PHASE 7 TASK 
 
-sit_down_rect = pygame.Rect(798, 400, 80, 80)
+sit_down_rect = pygame.Rect(860, 260, 80, 80)
 
 signages_rect = [pygame.Rect(120, 250, 200, 200), pygame.Rect(400, 250, 200, 200), pygame.Rect(700, 250, 200, 200),]
 signage_image1 = pygame.image.load('images/stop.png')
@@ -416,6 +416,7 @@ phase_7right_indicator = False
 phase_7wrong_indicator = False
 
 signage_images = [signage_image1, signage_image2, signage_image3]
+
 
 # Function to handle the Phase 7 task
 def perform_phase7_task():
@@ -446,8 +447,35 @@ def perform_phase7_task():
     pygame.display.update()
 
 
+# PHASE 8 RECT
+
+phase8_rect = pygame.Rect(550, 250, 200, 200)
+
+
+# PHASE 9
+
+phase9_bus_rect = pygame.Rect(150, 410, 400, 122)
+bus_image = pygame.image.load('images/bus.png')
+
+
+background_image = pygame.image.load('images/mountain.png') # Load your background
+background_image1 = pygame.image.load('images/trial.png') # Load your background
+background_width2 = background_image.get_width()
+background_width = background_image1.get_width()
+
+background_scroll_speed2 = 1
+background_scroll_speed = 4  # Adjust the scrolling speed 
+# Create two background surfaces
+bg_x1 = 0
+bg_x2 = background_width  # Start the second background just off the screen
+
+bg_x1_image = 0
+bg_x2_image = background_width2
+
+
+
 def updateGameWindow():
-    global walkCount, current_phase
+    global walkCount, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image 
 
     # Draw the objective if it hasn't been completed
     if current_phase == 'spawning':
@@ -505,9 +533,9 @@ def updateGameWindow():
         elif current_phase == 6:
             win.blit(bg_phase6, (0, 0))
             if traffic_light_color == "red":
-                pygame.draw.circle(win, (255, 0, 0), traffic_light_center, traffic_light_radius)
+                pygame.draw.circle(win, (0, 0, 0), traffic_light_center, traffic_light_radius)
             else:
-                pygame.draw.circle(win, (0, 255, 0), traffic_light_center1, traffic_light_radius2)
+                pygame.draw.circle(win, (0, 0, 0), traffic_light_center1, traffic_light_radius2)
             win.blit(phase6_car_image, car_rect)
             win.blit(phase6_car_image2, car_rect2)
             font = pygame.font.Font(None, 48)
@@ -528,8 +556,40 @@ def updateGameWindow():
             pygame.draw.rect(win, (0, 255, 0), sit_down_rect)
         elif current_phase == 8:
             win.blit(bg_phase8, (0, 0))
+            pygame.draw.rect(win, (0, 255, 0), phase8_rect)
         elif current_phase == 9:
-            win.blit(bg_phase9, (0, 0))
+            
+            #win.blit(background_image, (0, 0))
+            win.blit(background_image, (bg_x1_image, 0))
+            win.blit(background_image, (bg_x2_image, 0))
+            win.blit(background_image1, (bg_x1, 280))
+            win.blit(background_image1, (bg_x2, 280))
+            win.blit(bus_image, phase9_bus_rect)
+            
+
+            bg_x1_image -= background_scroll_speed2
+            bg_x2_image -= background_scroll_speed2
+
+
+            bg_x1 -= background_scroll_speed
+            bg_x2 -= background_scroll_speed
+     
+
+            # Check if the first background has moved off-screen
+            if bg_x1 <= -background_width:
+                bg_x1 = bg_x2 + background_width  # Position the first background just after the second
+            # Check if the second background has moved off-screen
+            if bg_x2 <= -background_width:
+                bg_x2 = bg_x1 + background_width  # Position the second background just after the first
+
+            # Check if the first background has moved off-screen
+            if bg_x1_image <= -background_width2:
+                bg_x1_image = bg_x2_image + background_width2  # Position the first background just after the second
+            # Check if the second background has moved off-screen
+            if bg_x2_image <= -background_width2:
+                bg_x2_image = bg_x1_image + background_width2  # Position the second background just after the first
+
+
         elif current_phase == 10:
             win.blit(bg_phase10, (0, 0))
         elif current_phase == 11:
@@ -576,6 +636,11 @@ def transition_to_task_screen():
 
 def start_new_phase():
     global current_phase, x, y, left, right, up, down
+
+    if current_phase == 8:
+        fade(win, screen_width, screen_height, fade_out=True)  # Fade out
+
+
     if current_phase == 'spawning':
         current_phase = 1
     elif current_phase == 1:
@@ -592,16 +657,35 @@ def start_new_phase():
         current_phase = 7
     elif current_phase == 7:
         current_phase = 8
+    elif current_phase == 8:
+        current_phase = 9
+    elif current_phase == 9:
+        current_phase = 10
+    elif current_phase == 10:
+        current_phase = 11
     elif current_phase > 2:
         current_phase += 1
 
     x, y = initial_positions [current_phase] # Use initial positions for the current phase
-
+    
     # Reset movement flags
     left = False
     right = False
     up = False
     down = False
+
+        
+
+def fade(win, width, height, fade_out=True):
+    fade_surface = pygame.Surface((width, height))
+    fade_surface.fill((0, 0, 0))
+    alpha_range = range(0, 200) if fade_out else range(300, -1, -1)  # Reverse for fade-in
+    for alpha in alpha_range:
+        fade_surface.set_alpha(alpha)
+        win.blit(fade_surface, (0, 0))
+        pygame.display.flip()
+        pygame.time.delay(20)
+
 
 def is_restricted(new_x, new_y):
     char_rect = pygame.Rect(new_x, new_y, char.get_width(), char.get_height())
@@ -893,6 +977,11 @@ while run:
                 transition_to_task_screen()
             elif current_phase == 7 and x >= screen_width - char.get_width():
                 x = screen_width - char.get_width() - 1
+            elif current_phase == 8:
+                Player_rect = player_rect = pygame.Rect(x, y, 50, 50)
+                if Player_rect.colliderect(phase8_rect):
+                    x, y = initial_positions[current_phase]
+                    start_new_phase()
             elif x > screen_width:
                 start_new_phase()
         else:
