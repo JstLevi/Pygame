@@ -67,11 +67,11 @@ restricted_areas = [
 ]
 
 # Start at the spawning area
-#current_phase = 'spawning'
-current_phase = 9
+current_phase = 'spawning'
+#current_phase = 9
 
 # Game character initial position and movement variables
-x, y = initial_positions[9]
+x, y = initial_positions['spawning']
 vel = 8
 left = False
 right = False
