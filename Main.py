@@ -475,7 +475,7 @@ bg_x2_image = background_width2
 
 
 def updateGameWindow():
-    global walkCount, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image 
+    global walkCount, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image
 
     # Draw the objective if it hasn't been completed
     if current_phase == 'spawning':
@@ -558,7 +558,6 @@ def updateGameWindow():
             win.blit(bg_phase8, (0, 0))
             pygame.draw.rect(win, (0, 255, 0), phase8_rect)
         elif current_phase == 9:
-            
             #win.blit(background_image, (0, 0))
             win.blit(background_image, (bg_x1_image, 0))
             win.blit(background_image, (bg_x2_image, 0))
