@@ -138,7 +138,7 @@ def perform_spawn_task():
         objective_completed = True
     
     if feedback_displayed:
-        font = pygame.font.Font(None, 48)
+        font = pygame.font.Font('Choi.ttf', 48)
         feedback_text = "Off we Go!"
         feedback_color = (0, 255, 0)
         text = font.render(feedback_text, True, feedback_color)
@@ -215,7 +215,7 @@ def perform_phase2_task():
         feedback_start_time = pygame.time.get_ticks()
 
     if feedback_displayed:
-        font = pygame.font.Font(None, 48)
+        font = pygame.font.Font('Choi.ttf', 48)
         feedback_text = "Well done!"
         feedback_color = (0, 255, 0)
         text = font.render(feedback_text, True, feedback_color)
@@ -247,7 +247,7 @@ beggar_image = pygame.image.load('images/beggar.png')
 phase4_bg = pygame.image.load('images/phase4_bg.jpg')
 
 # Task for phase 4
-beggar_task_rect = pygame.Rect(300, 300, 400, 300)
+beggar_task_rect = pygame.Rect(300, 300, 400, 350)
 beggar_task_image = pygame.image.load('images/beggar2.png')
 phase4_task_completed = False
 
@@ -285,14 +285,14 @@ def perform_phase4_task():
         feedback_start_time = pygame.time.get_ticks()
 
     if feedback_displayed:
-        font = pygame.font.Font(None, 48)
+        font = pygame.font.Font('Choi.ttf', 48)
         feedback_text = "Thank you for the Food!!"
         feedback_color = (0, 255, 0)
         text = font.render(feedback_text, True, feedback_color)
-        win.blit(text, (300, 500)) # Adjust the center position
+        win.blit(text, (270, 500)) # Adjust the center position
         
         # Check if the feedback display duration has passed
-        if pygame.time.get_ticks() - feedback_start_time > 2000:  
+        if pygame.time.get_ticks() - feedback_start_time > 3000:  
             task_screen = False 
             feedback_displayed = False  
 
@@ -441,7 +441,7 @@ def perform_phase7_task():
         text = font.render(feedback_text, True, feedback_color)
         win.blit(text, (430, 150))
     
-    font = pygame.font.Font(None, 40)
+    font = pygame.font.Font('Choi.ttf', 40)
     feedback_text = "Which sign shows the bus stop?"
     feedback_color = (255, 255, 255)
     text = font.render(feedback_text, True, feedback_color)
@@ -499,10 +499,12 @@ Ending_rect = pygame.Rect(450, 270, 100, 100)
 Exit_rect = pygame.Rect(100, 470, 100, 100)
 Exit_image = pygame.image.load('images/quit.png')
 
-
 main_menu_music = pygame.mixer.Sound("Music/menu.mp3")
 game_music = pygame.mixer.Sound("Music/game.mp3")
 end_music = pygame.mixer.Sound("Music/end.mp3")
+
+
+Menu_image = pygame.image.load('Background/Main_menu.jpg')
 
 def main_menu():
     global current_phase
@@ -511,10 +513,10 @@ def main_menu():
 
     # Colors
     white = (255, 255, 255)
-    black = (0, 0, 0)
+ 
 
     # Fonts
-    font = pygame.font.Font(None, 48)
+    font = pygame.font.Font('Choi.ttf', 60)
 
     # Buttons
     start_button = pygame.Rect(360, 250, 300, 80)
@@ -544,19 +546,22 @@ def main_menu():
                     exit()
 
         # Fill the screen
-        win.fill(white)  
+        win.fill(white)
+        win.blit(Menu_image, (0, 0))
+
 
         # Draw buttons
-        pygame.draw.rect(win, black, start_button)
-        pygame.draw.rect(win, black, exit_button)
+        #pygame.draw.rect(win, black, start_button)
+        #pygame.draw.rect(win, black, exit_button)
 
         # Draw text
-        draw_text("Start", font, white, win, start_button.centerx - 50, start_button.centery - 15)
-        draw_text("Exit", font, white, win, exit_button.centerx - 40, exit_button.centery - 15)
+        draw_text("Start", font, (0, 255, 0), win, start_button.centerx - 50, start_button.centery - 15)
+        draw_text("Exit", font, (0, 255, 0), win, exit_button.centerx - 40, exit_button.centery - 15)
         
         pygame.display.update()
         
     main_menu_music.stop()
+
 
 
 
@@ -579,52 +584,54 @@ def updateGameWindow():
         if not objective_completed:
             pygame.draw.rect(win, (255, 255, 255), spawn_text_rect)
             win.blit(bag_image, spawn_objective_rect)
-            font = pygame.font.Font(None, 48)
+            font = pygame.font.Font('Choi.ttf', 48)
             feedback_text = "GRAB YOUR BAG"
             feedback_color = (0, 0, 139)
             text = font.render(feedback_text, True, feedback_color)
-            win.blit(text, (40, 100))
+            win.blit(text, (40, 90))
     else:
         if current_phase == 1:
             win.blit(bg_phase1, (0, 0))
-            font = pygame.font.Font(None, 48)
-            feedback_text = "GO RIGHT ------>"
+            font = pygame.font.Font('Choi.ttf', 48)
+            feedback_text = "GO RIGHT"
             feedback_color = (0, 255, 0)
             text = font.render(feedback_text, True, feedback_color)
             win.blit(text, (200, 100))
+
         elif current_phase == 2:
             win.blit(bg_phase2, (0, 0))
             if not phase2_task_completed:
                 win.blit(dog_frames[current_dog_frame], phase2_objective_rect.move(75, 0))
                 win.blit(cat_frames[current_cat_frame], phase2_objective_rect) 
-                font = pygame.font.Font(None, 40)
+                font = pygame.font.Font('Choi.ttf', 40)
                 feedback_text = "SEPARATE THE DOG AND CAT"
                 feedback_color = (0, 255, 0)
                 text = font.render(feedback_text, True, feedback_color)
                 win.blit(text, (470, 70))
+
         elif current_phase == 3:
             win.blit(bg_phase3, (0, 0))
-            phase3_task_rect = pygame.Rect(200, 200, 650, 50)
+            phase3_task_rect = pygame.Rect(200, 200, 670, 50)
             pygame.draw.rect(win, (0, 0, 0), phase3_task_rect)
             win.blit(grandma_image, grandma_rect)
 
-            font = pygame.font.Font(None, 48)
-            feedback_text = "HELP THE GRANNY CROSS THE ROAD"
+            font = pygame.font.Font('Choi.ttf', 44)
+            feedback_text = "HELP  THE  GRANNY  CROSS  THE  ROAD"
             feedback_color = (0, 255, 0)
             text = font.render(feedback_text, True, feedback_color)
-            win.blit(text, (205, 210))
+            win.blit(text, (205, 205))
 
         elif current_phase == 4:
             win.blit(bg_phase4, (0, 0))
             if not phase4_task_completed:
                 win.blit(beggar_image, phase4_beggar_rect)
-                phase4_task_rect = pygame.Rect(190, 90, 440, 50)
+                phase4_task_rect = pygame.Rect(100, 90, 480, 50)
                 pygame.draw.rect(win, (0, 0, 0), phase4_task_rect)
-                font = pygame.font.Font(None, 48)
+                font = pygame.font.Font('Choi.ttf', 48)
                 feedback_text = "GIVE FOOD TO A BEGGAR"
                 feedback_color = (0, 255, 0)
                 text = font.render(feedback_text, True, feedback_color)
-                win.blit(text, (200, 100))
+                win.blit(text, (110, 96))
         elif current_phase == 5:
             win.blit(bg_phase5, (0, 0))
             for i, rect in enumerate(pedestrian_sign_rect):
@@ -637,15 +644,15 @@ def updateGameWindow():
                 pygame.draw.circle(win, (0, 0, 0), traffic_light_center1, traffic_light_radius2)
             win.blit(phase6_car_image, car_rect)
             win.blit(phase6_car_image2, car_rect2)
-            font = pygame.font.Font(None, 48)
-            feedback_text1 = 'WAIT FOR THE LIGHT TO TURN'
-            feedback_text2 = '"GREEN"'
+            font = pygame.font.Font('Choi.ttf', 48)
+            feedback_text1 = 'WAIT  FOR  THE  LIGHT  TO  TURN'
+            feedback_text2 = 'GREEN'
             feedback_color1 = (0, 0, 0)
             feedback_color2 = (0, 255, 0)
             text1 = font.render(feedback_text1, True, feedback_color1)
             text2 = font.render(feedback_text2, True, feedback_color2)
-            position1 = (50, 40)
-            position2 = (570, 40)
+            position1 = (50, 30)
+            position2 = (665, 30)
             win.blit(text1, position1)
             win.blit(text2, position2)
             pygame.draw.rect(win, (0, 0, 0), text_rect)
@@ -653,7 +660,7 @@ def updateGameWindow():
             win.blit(bg_phase7, (0, 0))
             win.blit(sit_down_image, sit_down_rect)
 
-            font = pygame.font.Font(None, 30)
+            font = pygame.font.Font('Choi.ttf', 30)
             feedback_text = "SIT HERE"
             feedback_color = (0, 255, 0)
             text = font.render(feedback_text, True, feedback_color)
@@ -692,7 +699,7 @@ def updateGameWindow():
                 bus_reached_end = True
         elif current_phase == 10:
             win.blit(bg_phase10, (0, 0))
-            font = pygame.font.Font(None, 48)
+            font = pygame.font.Font('Choi.ttf', 48)
             feedback_text = "ARRIVED!"
             feedback_color = (0, 255, 0)
             text = font.render(feedback_text, True, feedback_color)
@@ -790,7 +797,6 @@ def start_new_phase():
     elif current_phase > 2:
         current_phase += 1
 
-
     x, y = initial_positions[current_phase] 
 
     # Reset movement flags
@@ -869,7 +875,7 @@ while run:
                                 feedback_displayed = True
 
                             # Display feedback for a short duration and then exit the task screen
-                            pygame.time.set_timer(pygame.USEREVENT, 2000)  # 1 second timer
+                            pygame.time.set_timer(pygame.USEREVENT, 1000)  # 1 second timer
 
                 elif current_phase == 2 and not phase2_task_completed:
                     if dog_rect.collidepoint(event.pos):
@@ -1106,12 +1112,23 @@ while run:
             left = False
             if current_phase == 1 and x > screen_width:
                 start_new_phase()
+
+            elif current_phase == 2 and x >= screen_width - char.get_width() and phase2_task_completed:
+                start_new_phase() 
             elif current_phase == 2 and x >= screen_width - char.get_width() and not phase2_task_completed:
-                x = screen_width - char.get_width() - 1  # Preventing moving further right     
+                x = screen_width - char.get_width() - 1
+       
+            elif current_phase == 4 and x >= screen_width - char.get_width() and phase4_task_completed:
+                start_new_phase()
             elif current_phase == 4 and x >= screen_width - char.get_width() and not phase4_task_completed:
                 x = screen_width - char.get_width() - 1
+
+          
             elif current_phase == 5 and x >= 180 and not phase5_task_completed:
                 transition_to_task_screen()
+            elif current_phase == 5 and x >= screen_width - char.get_width() and phase5_task_completed:
+                start_new_phase()
+            
             elif current_phase == 7 and x >= screen_width - char.get_width():
                 x = screen_width - char.get_width() - 1
             elif current_phase == 8:
