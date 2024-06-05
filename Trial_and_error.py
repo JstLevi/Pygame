@@ -1,7 +1,8 @@
 import pygame
-
+import time
 
 pygame.init()
+pygame.mixer.init()
 
 # Game window dimensions
 screen_width = 1000
@@ -31,9 +32,10 @@ bg_phase5 = pygame.image.load('Background/phase5.jpg')
 bg_phase6 = pygame.image.load('background/phase6.png')
 bg_phase7 = pygame.image.load('background/phase7.jpg')
 bg_phase8 = pygame.image.load('background/phase8.jpg')
-bg_phase9 = pygame.image.load('background/phase9.jpg')
+#bg_phase9 = pygame.image.load('background/phase9.png')
 bg_phase10 = pygame.image.load('background/phase10.jpg')
 bg_phase11 = pygame.image.load('background/phase11.jpg')
+bg_phase12 = pygame.image.load('background/phase12.png')
 
 # Initial positions for each phase (x, y)
 initial_positions = {
@@ -43,12 +45,13 @@ initial_positions = {
     3: (0, 360),
     4: (0, 430), 
     5: (0, 340),
-    6: (460, 280),
-    7: (0, 430),
-    8: (50, 430),
+    6: (460, 265),
+    7: (0, 300),
+    8: (120, 358),
     9: (50, 430),
     10: (50, 430),
-    11: (50, 430)
+    11: (465, 550),
+    12: (465, 470)
 }
 
 # Restricted areas in the spawning phase (x, y, width, height)
@@ -67,11 +70,11 @@ restricted_areas = [
 ]
 
 # Start at the spawning area
-#current_phase = 'spawning'
-current_phase = 5
+current_phase = 'spawning'
+#current_phase = 11
 
 # Game character initial position and movement variables
-x, y = initial_positions[5]
+x, y = initial_positions['spawning']
 vel = 8
 left = False
 right = False
@@ -85,6 +88,7 @@ feedback_start_time = 0
 
 # Spawn Area Objective variables
 spawn_objective_rect = pygame.Rect(210, 500, 70, 50)  # Example position and size of the objective
+spawn_text_rect = pygame.Rect (30, 90, 320, 50)
 bag_image = pygame.image.load('images/bag.png')
 bg_spawning_task = pygame.image.load('images/spawntask.png')
 objective_completed = False
@@ -153,6 +157,7 @@ def perform_spawn_task():
 
 # Phase 2 objective
 phase2_objective_rect = pygame.Rect(600, 100, 200, 300) # Example position and size of the phase 2 objective
+phase2_task_screen_bg = pygame.image.load('images/phase2_task.png')
 phase2_task_completed = False
 
 
@@ -175,10 +180,10 @@ animation_speed = 2 # Higher value means slower animation
 frame_count = 0
 
 # Task for phase 2
-dog_rect = pygame.Rect(520, 250, 130, 130)    # Example position and size
+dog_rect = pygame.Rect(560, 350, 130, 130)    # Example position and size
 dog_image = pygame.image.load('images/dog_stationary.png')
 
-cat_rect = pygame.Rect(380, 275, 130, 130)    # Example position and size
+cat_rect = pygame.Rect(420, 350, 130, 130)    # Example position and size
 cat_image = pygame.image.load('images/cat_stationary.png')
 dragging_animal = None
 
@@ -197,6 +202,7 @@ def phase2_update_animation():
 def perform_phase2_task():
     global dragging_animal, task_screen, phase2_task_completed, feedback_displayed, feedback_start_time
     win.fill((0, 0, 0))  # Black background
+    win.blit(phase2_task_screen_bg, (0, 0))
 
 
     # Draw the dog and cat
@@ -230,6 +236,7 @@ def perform_phase2_task():
 
 # Task for phase 3. Help the Grandma cross the pedestrian lane
 grandma_rect = pygame.Rect(200, 340, 60, 100) # Example position and size for grandma
+
 
 grandma_image = pygame.image.load('images/grandma.png')
 holding_grandma = False # To check if player is helping the grandma
@@ -356,8 +363,8 @@ def perform_phase5_task():
 # PHASE6 OBJECTIVE AND TASK
 
 traffic_light_color = "red"  # Initial color of the traffic light
-traffic_light_rect_red = pygame.Rect(709, 110, 50, 50)  # Traffic light rectangle
-traffic_light_rect_green = pygame.Rect(709, 165, 50, 50)  # Traffic light rectangle for green light
+traffic_light_rect_red = pygame.Rect(708, 174, 35, 35)  # Traffic light rectangle
+traffic_light_rect_green = pygame.Rect(708, 119, 35, 35)  # Traffic light rectangle for green light
 traffic_light_center = traffic_light_rect_red.center
 traffic_light_radius = traffic_light_rect_red.width // 2
 traffic_light_center1 = traffic_light_rect_green.center
@@ -372,7 +379,7 @@ phase6_car_image = pygame.image.load('images/phase6_car.png')
 
 car_rect2 = pygame.Rect(-1200, 450, car_width, car_height)  # Initial car position
 phase6_car_image2 = pygame.image.load('images/phase6_car2.png')
-car_vel = 5
+car_vel = 4
 walk_vel = 4
 phase6_task_completed = False
 phase6_upper_boundary = 260
@@ -405,7 +412,8 @@ def phase6_moving_car():
 
 # PHASE 7 TASK 
 
-sit_down_rect = pygame.Rect(798, 400, 80, 80)
+sit_down_rect = pygame.Rect(875, 290, 50, 51)
+sit_down_image = pygame.image.load('images/arrow.png')
 
 signages_rect = [pygame.Rect(120, 250, 200, 200), pygame.Rect(400, 250, 200, 200), pygame.Rect(700, 250, 200, 200),]
 signage_image1 = pygame.image.load('images/stop.png')
@@ -417,6 +425,7 @@ phase_7wrong_indicator = False
 
 signage_images = [signage_image1, signage_image2, signage_image3]
 
+
 # Function to handle the Phase 7 task
 def perform_phase7_task():
     global task_screen, current_phase, signages_rect, correct_answer_index, feedback_start_time, feedback_displayed, phase_7right_indicator
@@ -425,9 +434,7 @@ def perform_phase7_task():
     # Draw the signages
     for i, rect in enumerate(signages_rect):
         win.blit(signage_images[i], rect)
-        pygame.draw.rect(win, (0, 255, 0), rect ) 
-
-        pygame.draw.rect(win, (255, 255, 255), rect, 2)  # White border, 2 pixels wide
+        pygame.draw.rect(win, (255, 255, 255), rect, 2)  
         win.blit(signage_images[i], rect)
 
     if feedback_displayed:
@@ -446,11 +453,126 @@ def perform_phase7_task():
     pygame.display.update()
 
 
-def updateGameWindow():
-    global walkCount, current_phase
 
-    # Draw the objective if it hasn't been completed
+
+
+# PHASE 8 RECT
+
+phase8_rect = pygame.Rect(550, 250, 200, 200)
+
+
+# PHASE 9
+
+phase9_bus_rect = pygame.Rect(150, 410, 400, 122)
+bus_image = pygame.image.load('images/bus.png')
+
+
+background_loop_count = 0
+max_background_loops = 2
+bus_reached_end = False
+
+background_image = pygame.image.load('images/mountain.png') 
+background_image1 = pygame.image.load('images/trial.png') 
+background_width2 = background_image.get_width()
+background_width = background_image1.get_width()
+
+background_scroll_speed2 = 1
+background_scroll_speed = 11 
+bg_x1 = 0
+bg_x2 = background_width 
+
+bg_x1_image = 0
+bg_x2_image = background_width2
+
+
+# PHASE 10 
+
+Okay_botton_rect = pygame.Rect(400, 90, 80, 50)
+okay_botton_image = pygame.image.load('images/okay.png')
+phase10_start_time = None
+
+
+# PHASE 11
+
+Ending_rect = pygame.Rect(450, 270, 100, 100)
+
+
+# 12 LOOP CONDITION
+
+Exit_rect = pygame.Rect(100, 470, 100, 100)
+Exit_image = pygame.image.load('images/quit.png')
+
+
+main_menu_music = pygame.mixer.Sound("Music/menu.mp3")
+game_music = pygame.mixer.Sound("Music/game.mp3")
+end_music = pygame.mixer.Sound("Music/end.mp3")
+
+def main_menu():
+    global current_phase
+
+    main_menu_music.play(-1) 
+
+    # Colors
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+
+    # Fonts
+    font = pygame.font.Font(None, 48)
+
+    # Buttons
+    start_button = pygame.Rect(360, 250, 300, 80)
+    exit_button = pygame.Rect(360, 350, 300, 80)
+
+    def draw_text(text, font, color, surface, x, y):
+        textobj = font.render(text, 1, color)
+        textrect = textobj.get_rect()
+        textrect.topleft = (x, y)
+        surface.blit(textobj, textrect)
+    
+    
+
+    # Main Menu Loop
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.collidepoint(event.pos):
+                    current_phase = 'spawning'  
+                    running = False  
+                if exit_button.collidepoint(event.pos):
+                    pygame.quit()  # Quit Pygame
+                    exit()
+
+        # Fill the screen
+        win.fill(white)  
+
+        # Draw buttons
+        pygame.draw.rect(win, black, start_button)
+        pygame.draw.rect(win, black, exit_button)
+
+        # Draw text
+        draw_text("Start", font, white, win, start_button.centerx - 50, start_button.centery - 15)
+        draw_text("Exit", font, white, win, exit_button.centerx - 40, exit_button.centery - 15)
+        
+        pygame.display.update()
+        
+    main_menu_music.stop()
+
+
+
+
+def updateGameWindow():
+    global walkCount, game_music_playing, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image, bus_reached_end, background_loop_count, phase10_start_time
+    
+    if current_phase == -1:
+        main_menu()
+    
     if current_phase == 'spawning':
+        game_music.play(-1)  
+        game_music_playing = True
         win.blit(bg_spawning, (0, 0))
         char_current = pygame.transform.scale(char, (100, 120))
         walkLeft_current = [pygame.transform.scale(img, (100, 120)) for img in walkLeft]
@@ -458,13 +580,13 @@ def updateGameWindow():
         walkUp_current = [pygame.transform.scale(img, (100, 120)) for img in walkUp]
         walkDown_current = [pygame.transform.scale(img, (100, 120)) for img in walkDown]
         if not objective_completed:
+            pygame.draw.rect(win, (255, 255, 255), spawn_text_rect)
             win.blit(bag_image, spawn_objective_rect)
             font = pygame.font.Font(None, 48)
-            feedback_text = "GRAB YOUR THINGS"
-            feedback_color = (0, 255, 0)
+            feedback_text = "GRAB YOUR BAG"
+            feedback_color = (0, 0, 139)
             text = font.render(feedback_text, True, feedback_color)
-            win.blit(text, (200, 100))
-
+            win.blit(text, (40, 100))
     else:
         if current_phase == 1:
             win.blit(bg_phase1, (0, 0))
@@ -477,21 +599,30 @@ def updateGameWindow():
             win.blit(bg_phase2, (0, 0))
             if not phase2_task_completed:
                 win.blit(dog_frames[current_dog_frame], phase2_objective_rect.move(75, 0))
-                win.blit(cat_frames[current_cat_frame], phase2_objective_rect)  # Adjust the offset (100, 0) to position the cat relative to the dog
-                #pygame.draw.rect(win, (255, 0, 0), phase2_objective_rect)
-                font = pygame.font.Font(None, 48)
+                win.blit(cat_frames[current_cat_frame], phase2_objective_rect) 
+                font = pygame.font.Font(None, 40)
                 feedback_text = "SEPARATE THE DOG AND CAT"
                 feedback_color = (0, 255, 0)
                 text = font.render(feedback_text, True, feedback_color)
-                win.blit(text, (200, 100))
+                win.blit(text, (470, 70))
         elif current_phase == 3:
             win.blit(bg_phase3, (0, 0))
+            phase3_task_rect = pygame.Rect(200, 200, 650, 50)
+            pygame.draw.rect(win, (0, 0, 0), phase3_task_rect)
             win.blit(grandma_image, grandma_rect)
-            #pygame.draw.rect(win, (0, 0, 255), grandma_rect) # Draw the grandma color
+
+            font = pygame.font.Font(None, 48)
+            feedback_text = "HELP THE GRANNY CROSS THE ROAD"
+            feedback_color = (0, 255, 0)
+            text = font.render(feedback_text, True, feedback_color)
+            win.blit(text, (205, 210))
+
         elif current_phase == 4:
             win.blit(bg_phase4, (0, 0))
             if not phase4_task_completed:
                 win.blit(beggar_image, phase4_beggar_rect)
+                phase4_task_rect = pygame.Rect(190, 90, 440, 50)
+                pygame.draw.rect(win, (0, 0, 0), phase4_task_rect)
                 font = pygame.font.Font(None, 48)
                 feedback_text = "GIVE FOOD TO A BEGGAR"
                 feedback_color = (0, 255, 0)
@@ -501,13 +632,12 @@ def updateGameWindow():
             win.blit(bg_phase5, (0, 0))
             for i, rect in enumerate(pedestrian_sign_rect):
                 win.blit(pedestrian_image[i], rect)
-
         elif current_phase == 6:
             win.blit(bg_phase6, (0, 0))
             if traffic_light_color == "red":
-                pygame.draw.circle(win, (255, 0, 0), traffic_light_center, traffic_light_radius)
+                pygame.draw.circle(win, (0, 0, 0), traffic_light_center, traffic_light_radius)
             else:
-                pygame.draw.circle(win, (0, 255, 0), traffic_light_center1, traffic_light_radius2)
+                pygame.draw.circle(win, (0, 0, 0), traffic_light_center1, traffic_light_radius2)
             win.blit(phase6_car_image, car_rect)
             win.blit(phase6_car_image2, car_rect2)
             font = pygame.font.Font(None, 48)
@@ -522,18 +652,69 @@ def updateGameWindow():
             win.blit(text1, position1)
             win.blit(text2, position2)
             pygame.draw.rect(win, (0, 0, 0), text_rect)
-
         elif current_phase == 7:
             win.blit(bg_phase7, (0, 0))
-            pygame.draw.rect(win, (0, 255, 0), sit_down_rect)
+            win.blit(sit_down_image, sit_down_rect)
+
+            font = pygame.font.Font(None, 30)
+            feedback_text = "SIT HERE"
+            feedback_color = (0, 255, 0)
+            text = font.render(feedback_text, True, feedback_color)
+            win.blit(text, (860, 260))
         elif current_phase == 8:
             win.blit(bg_phase8, (0, 0))
         elif current_phase == 9:
-            win.blit(bg_phase9, (0, 0))
+            win.blit(background_image, (bg_x1_image, 0))
+            win.blit(background_image, (bg_x2_image, 0))
+            win.blit(background_image1, (bg_x1, 280))
+            win.blit(background_image1, (bg_x2, 280))
+            win.blit(bus_image, phase9_bus_rect)
+
+            bg_x1_image -= background_scroll_speed2
+            bg_x2_image -= background_scroll_speed2
+
+            bg_x1 -= background_scroll_speed
+            bg_x2 -= background_scroll_speed
+
+            if bg_x1 <= -background_width:
+                bg_x1 = bg_x2 + background_width  
+                background_loop_count += 1 
+            # Check if the second background has moved off-screen
+            if bg_x2 <= -background_width:
+                bg_x2 = bg_x1 + background_width 
+                background_loop_count += 1  # Increment the loop count
+
+            # Check if the first background has moved off-screen
+            if bg_x1_image <= -background_width2:
+                bg_x1_image = bg_x2_image + background_width2  # Position the first background just after the second
+            # Check if the second background has moved off-screen
+            if bg_x2_image <= -background_width2:
+                bg_x2_image = bg_x1_image + background_width2  # Position the second background just after the first
+
+            if background_loop_count == max_background_loops:
+                bus_reached_end = True
         elif current_phase == 10:
             win.blit(bg_phase10, (0, 0))
+            font = pygame.font.Font(None, 48)
+            feedback_text = "ARRIVED!"
+            feedback_color = (0, 255, 0)
+            text = font.render(feedback_text, True, feedback_color)
+            win.blit(text, (200, 100))
+            if phase10_start_time is None:
+                phase10_start_time = time.time() 
+            elif time.time() - phase10_start_time >= 3:  # Check if 3 seconds have passed
+                win.blit(okay_botton_image, Okay_botton_rect)
+                
         elif current_phase == 11:
-            win.blit(bg_phase11, (0, 0))    
+            win.blit(bg_phase11, (0, 0))
+            
+        elif current_phase == 12:
+            game_music.stop()
+            end_music.play()
+            game_music_playing = True
+            win.blit(bg_phase12, (0, 0))
+            win.blit(Exit_image, Exit_rect)
+        
         char_current = char
         walkLeft_current = walkLeft
         walkRight_current = walkRight
@@ -543,39 +724,43 @@ def updateGameWindow():
     if walkCount + 1 >= 12:
         walkCount = 0
 
-    if left:
-        win.blit(walkLeft_current[walkCount // 3], (x, y))
-        walkCount += 1
-    elif right:
-        win.blit(walkRight_current[walkCount // 3], (x, y))
-        walkCount += 1
-    elif up:
-        win.blit(walkUp_current[walkCount // 3], (x, y))
-        walkCount += 1
-    elif down:
-        win.blit(walkDown_current[walkCount // 3], (x, y))
-        walkCount += 1
-    else:
-        win.blit(char_current, (x, y))
-
-    
-    #for area in restricted_areas:
-        #pygame.draw.rect(win, (0, 255, 0), area)
-
+    if current_phase != 9 and current_phase != 10:
+        if left:
+            win.blit(walkLeft_current[walkCount // 3], (x, y))
+            walkCount += 1
+        elif right:
+            win.blit(walkRight_current[walkCount // 3], (x, y))
+            walkCount += 1
+        elif up:
+            win.blit(walkUp_current[walkCount // 3], (x, y))
+            walkCount += 1
+        elif down:
+            win.blit(walkDown_current[walkCount // 3], (x, y))
+            walkCount += 1
+        else:
+            win.blit(char_current, (x, y))
 
     pygame.display.update()
-
 
 def transition_to_task_screen():
     global task_screen
     win.fill((0, 0, 0))  # Black screen
     pygame.display.update()
-    pygame.time.delay(500)  # Delay for transition effect
+    pygame.time.delay(500)  # Delay transition effect
     task_screen = True
 
-
 def start_new_phase():
-    global current_phase, x, y, left, right, up, down
+    global current_phase, x, y, left, right, up, down, background_loop_count, bus_reached_end, phase10_start_time
+
+    if current_phase == 8:
+        fade(win, screen_width, screen_height, fade_out=True)
+
+    if current_phase == 9:
+        fade(win, screen_width, screen_height, fade_out=True)
+
+    if current_phase == 11:
+        fade(win, screen_width, screen_height, fade_out=True)
+
     if current_phase == 'spawning':
         current_phase = 1
     elif current_phase == 1:
@@ -592,16 +777,40 @@ def start_new_phase():
         current_phase = 7
     elif current_phase == 7:
         current_phase = 8
+    elif current_phase == 8:
+        current_phase = 9
+    elif current_phase == 9:
+        bus_reached_end = True
+        current_phase = 10
+        background_loop_count = 0 
+        phase10_start_time = None 
+        # Reset bus_reached_end flag for next phase
+    elif current_phase == 10:
+        current_phase = 11
+    elif current_phase == 11:
+        current_phase = 12
+
     elif current_phase > 2:
         current_phase += 1
 
-    x, y = initial_positions [current_phase] # Use initial positions for the current phase
+
+    x, y = initial_positions[current_phase] 
 
     # Reset movement flags
     left = False
     right = False
     up = False
     down = False
+
+def fade(win, width, height, fade_out=True):
+    fade_surface = pygame.Surface((width, height))
+    fade_surface.fill((0, 0, 0))
+    alpha_range = range(0, 100) if fade_out else range(300, -1, -1) 
+    for alpha in alpha_range:
+        fade_surface.set_alpha(alpha)
+        win.blit(fade_surface, (0, 0))
+        pygame.display.flip()
+        pygame.time.delay(30)
 
 def is_restricted(new_x, new_y):
     char_rect = pygame.Rect(new_x, new_y, char.get_width(), char.get_height())
@@ -611,8 +820,12 @@ def is_restricted(new_x, new_y):
     return False
 
 
+game_music_playing = False  # Flag to track if game music is playing
+current_phase = -1
+
 # Main loop
 run = True
+
 while run:
     clock.tick(27)
 
@@ -624,8 +837,7 @@ while run:
         vel = slow_vel
     else:
         vel = 10
-    
-    
+
     # Event Handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -639,13 +851,13 @@ while run:
                             if i == correct_signage_index:
                                 right_indicator = True
                                 feedback_displayed = True
-                                
+
                             else:
                                 wrong_indicator = True
                                 feedback_displayed = True
                                 x, y = initial_positions[current_phase]
 
-                        # Display feedback for a short duration and then exit the task screen
+                            # Display feedback for a short duration and then exit the task screen
                             pygame.time.set_timer(pygame.USEREVENT, 1000)  # 1 second timer
 
                 elif current_phase == 7:
@@ -654,17 +866,13 @@ while run:
                             if i == correct_answer_index:
                                 phase_7right_indicator = True
                                 feedback_displayed = True
-                                x, y = initial_positions[current_phase]
-                                
-                                
+
                             else:
                                 wrong_indicator = True
                                 feedback_displayed = True
 
-                        # Display feedback for a short duration and then exit the task screen
+                            # Display feedback for a short duration and then exit the task screen
                             pygame.time.set_timer(pygame.USEREVENT, 2000)  # 1 second timer
-
-        
 
                 elif current_phase == 2 and not phase2_task_completed:
                     if dog_rect.collidepoint(event.pos):
@@ -691,20 +899,24 @@ while run:
                             offset_y = obj['rect'].y - mouse_y
 
             elif current_phase == 'spawning' and not objective_completed and spawn_objective_rect.collidepoint(event.pos):
-                    if abs(x - spawn_objective_rect.x) < 60 and abs(y - spawn_objective_rect.y) < 140:
-                        transition_to_task_screen()
+                if abs(x - spawn_objective_rect.x) < 60 and abs(y - spawn_objective_rect.y) < 140:
+                    transition_to_task_screen()
             elif current_phase == 2 and not phase2_task_completed and phase2_objective_rect.collidepoint(event.pos):
-                 if abs(x - phase2_objective_rect.x) < 100 and abs(y - phase2_objective_rect.y) < 500:
-                        transition_to_task_screen()
+                if abs(x - phase2_objective_rect.x) < 100 and abs(y - phase2_objective_rect.y) < 500:
+                    transition_to_task_screen()
             elif current_phase == 3 and grandma_rect.collidepoint(event.pos):
                 holding_grandma = True
             elif current_phase == 4 and not phase4_task_completed and phase4_beggar_rect.collidepoint(event.pos):
-                 if abs(x - phase4_beggar_rect.x) < 50 and abs(y - phase4_beggar_rect.y) < 50:
-                        transition_to_task_screen()
+                if abs(x - phase4_beggar_rect.x) < 50 and abs(y - phase4_beggar_rect.y) < 50:
+                    transition_to_task_screen()
             elif current_phase == 7 and sit_down_rect.collidepoint(event.pos):
-                    if abs(x - sit_down_rect.x) < 50 and abs(y - sit_down_rect.y) < 50:
-                        transition_to_task_screen()
-    
+                if abs(x - sit_down_rect.x) < 50 and abs(y - sit_down_rect.y) < 50:
+                    transition_to_task_screen()
+            elif current_phase == 10 and Okay_botton_rect.collidepoint(event.pos):
+                start_new_phase() 
+            elif current_phase == 12 and Exit_rect.collidepoint(event.pos):
+                if abs(x - Exit_rect.x) < 50 and abs(y - Exit_rect.y) < 50:
+                    exit()
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if task_screen:
@@ -715,8 +927,8 @@ while run:
                         if food_items.index(dragging) == correct_item_index:
                             dragging['completed'] = True
                         else:
-                            #reset the position if its the wrong item
-                            dragging['rect'].topleft = dragging['initial_pos']                       
+                            # reset the position if its the wrong item
+                            dragging['rect'].topleft = dragging['initial_pos']
                     else:
                         dragging['rect'].topleft = dragging['initial_pos']
                     dragging = None
@@ -724,12 +936,12 @@ while run:
                     if large_obj_rect.contains(dragging['rect']):
                         dragging['completed'] = True
                     else:
-                        #reset the position if its the wrong item
+                        # reset the position if its the wrong item
                         dragging['rect'].topleft = dragging['initial_pos']
                     dragging = None
 
-        
-
+            if current_phase == 3:
+                holding_grandma = False
 
         elif event.type == pygame.USEREVENT:
             if feedback_displayed:
@@ -742,12 +954,7 @@ while run:
 
                 if phase_7right_indicator:
                     current_phase = 8
-
-        
-                
-
-            if current_phase == 3:
-                holding_grandma = False
+                    x, y = initial_positions[current_phase]
 
         elif event.type == pygame.MOUSEMOTION:
             if task_screen:
@@ -765,7 +972,6 @@ while run:
                     mouse_x, mouse_y = event.pos
                     dragging['rect'].x = mouse_x + offset_x
                     dragging['rect'].y = mouse_y + offset_y
-
 
     keys = pygame.key.get_pressed()
 
@@ -828,10 +1034,10 @@ while run:
         elif keys[pygame.K_d] and holding_grandma and x < screen_width - char.get_width():
             grandma_rect.x = x + char.get_width() // 2 - grandma_rect.width // 2
 
-        if holding_grandma and abs(x - grandma_rect.x) > 50:  # If they are not close enough
+        if holding_grandma and abs(x - grandma_rect.x) > 50: 
             holding_grandma = False  # Stop holding the grandma
 
-        if holding_grandma and grandma_rect.x > 700 and x > 700:  # Check if both have crossed x > 500
+        if holding_grandma and grandma_rect.x > 700 and x > 700:
             phase3_task_completed = True
             holding_grandma = False
         
@@ -863,9 +1069,7 @@ while run:
                 # Reset to initial position if colliding with car on red light
                 x, y = initial_positions[current_phase]
                 reset_car_position()
-            
-            # Check if character reaches the bottom of the screen (crossed safely)
-
+    
             if y >= screen_height - char.get_height():
                 if traffic_light_color == "green":
                     phase6_task_completed = True
@@ -873,8 +1077,28 @@ while run:
                 else:
                     y = screen_height - char.get_height() - 1
 
+    elif current_phase == 11:
+        if keys[pygame.K_w] and y > 0 :
+            y -= vel
+            up = True
+            down = False
+        elif keys[pygame.K_s]:
+            y += vel
+            down = True
+            up = False
+
+        elif current_phase == 11 and y >= screen_height - char.get_height():
+                y = screen_height - char.get_height() - 1
+        else:
+            up = False
+            down = False
+
+        if current_phase == 11:
+                Player_rect = player_rect = pygame.Rect(x, y, 20, 20)
+                if Player_rect.colliderect(Ending_rect):
+                    start_new_phase()
+                    
     else:
-        # Horizontal movement only for phases 1, 2, 4, 5
         if keys[pygame.K_a] and x > 0:
             x -= vel
             left = True
@@ -886,15 +1110,26 @@ while run:
             if current_phase == 1 and x > screen_width:
                 start_new_phase()
             elif current_phase == 2 and x >= screen_width - char.get_width() and not phase2_task_completed:
-                x = screen_width - char.get_width() - 1 # Preventing moving further right     
+                x = screen_width - char.get_width() - 1  # Preventing moving further right     
             elif current_phase == 4 and x >= screen_width - char.get_width() and not phase4_task_completed:
                 x = screen_width - char.get_width() - 1
             elif current_phase == 5 and x >= 180 and not phase5_task_completed:
                 transition_to_task_screen()
             elif current_phase == 7 and x >= screen_width - char.get_width():
                 x = screen_width - char.get_width() - 1
-            elif x > screen_width:
-                start_new_phase()
+            elif current_phase == 8:
+                Player_rect = player_rect = pygame.Rect(x, y, 20, 20)
+                if Player_rect.colliderect(phase8_rect):
+                    start_new_phase()
+            elif current_phase == 12 and x >= screen_width - char.get_width():
+                x = screen_width - char.get_width() - 1
+            
+
+            
+        elif x > screen_width:
+            start_new_phase()
+        elif current_phase == 9 and bus_reached_end:
+            start_new_phase()
         else:
             right = False
             left = False
@@ -913,4 +1148,5 @@ while run:
     else:
         updateGameWindow()
 
+pygame.mixer.quit()
 pygame.quit()
