@@ -519,7 +519,9 @@ textbox_phase10 = pygame.image.load('images/textbox_phase10.png')
 
 click_sound = pygame.mixer.Sound("Music/click.wav")
 game_music = pygame.mixer.Sound("Music/game.mp3")
+kids_music = pygame.mixer.Sound('Music/kids.mp3')
 end_music = pygame.mixer.Sound("Music/end.mp3")
+
 
 main_menu_music = pygame.mixer.Sound("Music/menu.mp3")
 
@@ -590,7 +592,7 @@ def main_menu():
 
 
 def updateGameWindow():
-    global walkCount, game_music_playing, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image, bus_reached_end, background_loop_count, phase10_start_time, click_sound
+    global walkCount, game_music_playing, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image, bus_reached_end, background_loop_count, phase10_start_time, click_sound, phase10_kids_played, end_music_played,game_music_continue_playing
 
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -601,8 +603,9 @@ def updateGameWindow():
         main_menu()
     
     if current_phase == 'spawning':
-        game_music.play(-1)  
-        game_music_playing = True
+        if not game_music_playing:
+            game_music.play(-1)  # Start playing the music in a loop
+            game_music_playing = True  # Mark the music as playing
         win.blit(bg_spawning, (0, 0))
         
         char_current = pygame.transform.scale(char, (100, 120))
@@ -736,6 +739,10 @@ def updateGameWindow():
             if background_loop_count == max_background_loops:
                 bus_reached_end = True
         elif current_phase == 10:
+            if not phase10_kids_played:
+                game_music.stop()
+                kids_music.play()  
+                phase10_kids_played = True
             win.blit(bg_phase10, (0, 0))
             win.blit(textbox_phase10, (0, 0))
             font = pygame.font.Font('Choi.ttf', 48)
@@ -750,11 +757,17 @@ def updateGameWindow():
                 
         elif current_phase == 11:
             win.blit(bg_phase11, (0, 0))
+            if not game_music_continue_playing:
+                game_music.play(-1)
+                game_music_continue_playing = True
+            
             
         elif current_phase == 12:
-            game_music.stop()
-            end_music.play()
-            game_music_playing = True
+        
+            if not end_music_played:  # Play end music only if it hasn't been played yet
+                game_music.stop()
+                end_music.play()
+                end_music_played = True
             win.blit(bg_phase12, (0, 0))
             win.blit(Exit_image, Exit_rect)
         
@@ -864,7 +877,9 @@ def is_restricted(new_x, new_y):
             return True
     return False
 
-
+game_music_continue_playing = False
+end_music_played = False
+phase10_kids_played = False
 game_music_playing = False  # Flag to track if game music is playing
 current_phase = -1
 
@@ -1180,8 +1195,9 @@ while run:
                     start_new_phase()
             elif current_phase == 12 and x >= screen_width - char.get_width():
                 x = screen_width - char.get_width() - 1
-            
+        
 
+        
             
         elif x > screen_width:
             start_new_phase()
@@ -1204,6 +1220,9 @@ while run:
             perform_spawn_task()
     else:
         updateGameWindow()
+
+            
+
 
 pygame.mixer.quit()
 pygame.quit()
