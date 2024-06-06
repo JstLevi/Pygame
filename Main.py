@@ -85,13 +85,19 @@ clock = pygame.time.Clock()
 feedback_displayed = False
 feedback_start_time = 0
 
+objective_completed = False
+phase2_task_completed = False
+phase3_task_completed = False
+phase4_task_completed = False
+phase5_task_completed = False
+phase6_task_completed = False
+
 
 # Spawn Area Objective variables
 spawn_objective_rect = pygame.Rect(210, 500, 70, 50)  # Example position and size of the objective
 spawn_text_rect = pygame.Rect (30, 90, 320, 50)
 bag_image = pygame.image.load('images/bag.png')
 bg_spawning_task = pygame.image.load('images/spawntask.png')
-objective_completed = False
 task_screen = False
 
 
@@ -159,7 +165,7 @@ def perform_spawn_task():
 # Phase 2 objective
 phase2_objective_rect = pygame.Rect(600, 100, 200, 300) 
 phase2_task_screen_bg = pygame.image.load('images/phase2_task.png')
-phase2_task_completed = False
+
 
 
 # Load the sprite sheet for phase 2 objectives\ 
@@ -239,7 +245,6 @@ grandma_rect = pygame.Rect(200, 340, 60, 100)
 
 grandma_image = pygame.image.load('images/grandma.png')
 holding_grandma = False
-phase3_task_completed = False
 slow_vel = 3
 
 
@@ -253,7 +258,7 @@ phase4_bg = pygame.image.load('images/phase4_bg.jpg')
 # Task for phase 4
 beggar_task_rect = pygame.Rect(300, 300, 400, 350)
 beggar_task_image = pygame.image.load('images/beggar2.png')
-phase4_task_completed = False
+
 
 image1_money = pygame.image.load('images/money.png')
 image2_toy = pygame.image.load('images/toy.png')
@@ -320,7 +325,6 @@ signage_image = [road_sign1, road_sign2, road_sign3]
 
 correct_signage_index = 2
 
-phase5_task_completed = False
 task_screen = False
 feedback_displayed = False
 right_indicator = False
@@ -382,7 +386,7 @@ car_rect2 = pygame.Rect(-1200, 450, car_width, car_height)  # Initial car positi
 phase6_car_image2 = pygame.image.load('images/phase6_car2.png')
 car_vel = 5
 walk_vel = 4
-phase6_task_completed = False
+
 phase6_upper_boundary = 260
 
 
@@ -488,7 +492,7 @@ bg_x2_image = background_width2
 
 # PHASE 10 
 
-Okay_botton_rect = pygame.Rect(400, 90, 80, 50)
+Okay_botton_rect = pygame.Rect(265, 27, 80, 50)
 okay_botton_image = pygame.image.load('images/okay.png')
 phase10_start_time = None
 

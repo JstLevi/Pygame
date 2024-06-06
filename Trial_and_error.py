@@ -70,11 +70,11 @@ restricted_areas = [
 ]
 
 # Start at the spawning area
-current_phase = 'spawning'
-#current_phase = 11
+#current_phase = 'spawning'
+current_phase = 10
 
 # Game character initial position and movement variables
-x, y = initial_positions['spawning']
+x, y = initial_positions[10]
 vel = 8
 left = False
 right = False
@@ -487,7 +487,7 @@ bg_x2_image = background_width2
 
 # PHASE 10 
 
-Okay_botton_rect = pygame.Rect(400, 90, 80, 50)
+Okay_botton_rect = pygame.Rect(265, 27, 80, 50)
 okay_botton_image = pygame.image.load('images/okay.png')
 phase10_start_time = None
 
@@ -503,75 +503,18 @@ Exit_rect = pygame.Rect(100, 470, 100, 100)
 Exit_image = pygame.image.load('images/quit.png')
 
 
-main_menu_music = pygame.mixer.Sound("Music/menu.mp3")
-game_music = pygame.mixer.Sound("Music/game.mp3")
-end_music = pygame.mixer.Sound("Music/end.mp3")
-
-def main_menu():
-    global current_phase
-
-    main_menu_music.play(-1) 
-
-    # Colors
-    white = (255, 255, 255)
-    black = (0, 0, 0)
-
-    # Fonts
-    font = pygame.font.Font(None, 48)
-
-    # Buttons
-    start_button = pygame.Rect(360, 250, 300, 80)
-    exit_button = pygame.Rect(360, 350, 300, 80)
-
-    def draw_text(text, font, color, surface, x, y):
-        textobj = font.render(text, 1, color)
-        textrect = textobj.get_rect()
-        textrect.topleft = (x, y)
-        surface.blit(textobj, textrect)
-    
-    
-
-    # Main Menu Loop
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_button.collidepoint(event.pos):
-                    current_phase = 'spawning'  
-                    running = False  
-                if exit_button.collidepoint(event.pos):
-                    pygame.quit()  # Quit Pygame
-                    exit()
-
-        # Fill the screen
-        win.fill(white)  
-
-        # Draw buttons
-        pygame.draw.rect(win, black, start_button)
-        pygame.draw.rect(win, black, exit_button)
-
-        # Draw text
-        draw_text("Start", font, white, win, start_button.centerx - 50, start_button.centery - 15)
-        draw_text("Exit", font, white, win, exit_button.centerx - 40, exit_button.centery - 15)
-        
-        pygame.display.update()
-        
-    main_menu_music.stop()
-
+textbox_phase10 = pygame.image.load('images/textbox_phase10.png')
 
 
 
 def updateGameWindow():
     global walkCount, game_music_playing, current_phase, bg_x1, bg_x2, bg_x1_image, bg_x2_image, bus_reached_end, background_loop_count, phase10_start_time
     
-    if current_phase == -1:
-        main_menu()
+    #if current_phase == -1:
+        #main_menu()
     
     if current_phase == 'spawning':
-        game_music.play(-1)  
+        #game_music.play(-1)  
         game_music_playing = True
         win.blit(bg_spawning, (0, 0))
         char_current = pygame.transform.scale(char, (100, 120))
@@ -695,11 +638,12 @@ def updateGameWindow():
                 bus_reached_end = True
         elif current_phase == 10:
             win.blit(bg_phase10, (0, 0))
-            font = pygame.font.Font(None, 48)
+            win.blit(textbox_phase10, (0, 0))
+            font = pygame.font.Font('Choi.ttf', 48)
             feedback_text = "ARRIVED!"
-            feedback_color = (0, 255, 0)
+            feedback_color = (0, 0, 0)
             text = font.render(feedback_text, True, feedback_color)
-            win.blit(text, (200, 100))
+            win.blit(text, (60, 26))
             if phase10_start_time is None:
                 phase10_start_time = time.time() 
             elif time.time() - phase10_start_time >= 3:  # Check if 3 seconds have passed
@@ -709,8 +653,8 @@ def updateGameWindow():
             win.blit(bg_phase11, (0, 0))
             
         elif current_phase == 12:
-            game_music.stop()
-            end_music.play()
+            #game_music.stop()
+            #end_music.play()
             game_music_playing = True
             win.blit(bg_phase12, (0, 0))
             win.blit(Exit_image, Exit_rect)
@@ -820,8 +764,8 @@ def is_restricted(new_x, new_y):
     return False
 
 
-game_music_playing = False  # Flag to track if game music is playing
-current_phase = -1
+#game_music_playing = False  # Flag to track if game music is playing
+#current_phase = -1
 
 # Main loop
 run = True
